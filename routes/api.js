@@ -173,8 +173,8 @@ router.post("/check-out", verifyToken, async (req, res) => {
     })
 })
 router.post("/reserve-book", verifyToken, async (req, res) => {
-    let book = new ReserveBook(req.body);
-    book.save((error, data) => {
+    let reserveBook = new ReserveBook(req.body);
+    reserveBook.save((error, data) => {
         res.status(200).send(data);
     })
 })
