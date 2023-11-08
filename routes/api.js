@@ -119,33 +119,6 @@ router.get('/book-list', verifyToken, async (req, res) => {
 })
 
 router.post("/check-in", verifyToken, async (req, res) => {
-    // Books.updateOne({ _id: req.body.bookId }, { $set: { quantity: req.body.quantity - 1 } }, async (err, data1) => {
-    //     getCheckIndata(req.body.bookId, req.body)
-    //     function getCheckIndata(bookId, item) {
-    //         var length;
-    //         CheckIn.find({ bookId: bookId }, async (error, data) => {
-    //             length = await data.length;
-    //             console.log(length)
-    //             updateCheckIn(data, length, item)
-    //         })
-    //     }
-    //     function updateCheckIn(data, checkInData, item) {
-    //         console.log(checkInData, data)
-    //         if (checkInData > 0) {
-
-    //             CheckIn.updateOne({ bookId: item.bookId }, { $set: { quantity: data[0].quantity + 1 } }, async (err, data3) => {
-    //                 res.status(200).send(data3)
-    //             });
-    //         }
-    //         else {
-    //             item.quantity = 1;
-    //             let checkIn = new CheckIn(item);
-    //             checkIn.save((error, data) => {
-    //                 res.status(200).send(data)
-    //             })
-    //         }
-    //     }
-    // })
     let checkIn = new CheckIn(req.body);
 
     Books.deleteOne({ _id: req.body.bookId }, async (err, data1) => {
@@ -153,6 +126,10 @@ router.post("/check-in", verifyToken, async (req, res) => {
             res.status(200).send(data)
         })
     })
+    ReserveBook.deleteOne({ bookId: req.body.bookId }, async (err, data1) => {
+        console.log("deleted");
+    })
+
 })
 
 router.get("/check-in", verifyToken, async (req, res) => {
@@ -167,7 +144,7 @@ router.get("/check-in", verifyToken, async (req, res) => {
 })
 
 router.post("/renewal-book", verifyToken, async (req, res) => {
-    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: {  status : "check-in",startDate: req.body.startDate, endDate: req.body.endDate } }, async (error, data) => {
+    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-in", startDate: req.body.startDate, endDate: req.body.endDate } }, async (error, data) => {
         res.status(200).send(data);
     })
 })
@@ -188,20 +165,24 @@ router.post("/pay-fine", verifyToken, async (req, res) => {
     })
 })
 router.post("/check-out", verifyToken, async (req, res) => {
- 
-    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-out",libraryname:req.body.libraryname } }, async (error, data1) => {
+    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-out", libraryname: req.body.libraryname } }, async (error, data1) => {
         let book = new Books(req.body);
         book.save((error, data) => {
-            res.status(200).send({data,data1});
+            res.status(200).send({ data, data1 });
         })
     })
 })
 router.post("/reserve-book", verifyToken, async (req, res) => {
-        let book = new ReserveBook(req.body);
-        book.save((error, data) => {
-            res.status(200).send(data);
-        })
- 
+    let book = new ReserveBook(req.body);
+    book.save((error, data) => {
+        res.status(200).send(data);
+    })
+})
+router.get("/reserve-book", verifyToken, async (req, res) => {
+    ReserveBook.find({ userId: req.query.userId }, async (error, data) => {
+        res.status(200).send(data);
+    })
+
 })
 // router.post("/create-teams", verifyToken, async (req, res) => {
 //     let data = { userId: req.userId, teams: req.body };

@@ -13,7 +13,8 @@ const bookList = new Schema({
    // quantity:Number,
    availability:String,
    rent:Number,
-   libraryname:String
+   libraryname:String,
+   status:String
 })
 
 module.exports = mongoose.model('book',bookList,'books')
