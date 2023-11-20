@@ -84,13 +84,10 @@ router.post('/login', (req, res) => {
                     })
                 }
             }
-
-
         }
     })
 })
 router.post("/add-library", verifyToken, async (req, res) => {
-    // console.log(req.body)
     let library = new Addlibrary(req.body);
     library.save((error, data) => {
         res.status(200).send(data);
@@ -102,7 +99,6 @@ router.get('/library-list', verifyToken, async (req, res) => {
     })
 })
 router.post("/add-book", verifyToken, async (req, res) => {
-    // console.log(req.body)
     let book = new Books(req.body);
     book.save((error, data) => {
         res.status(200).send(data);
@@ -112,7 +108,6 @@ router.get('/book-list', verifyToken, async (req, res) => {
     const item = req.query.libraryname;
     let name = {};
     item?.length == 0 ? name = name : name = { libraryname: req.query.libraryname };
-    // console.log(name,item,"sasa")
     Books.find(name, (error, data) => {
         res.status(200).send(data);
     })
@@ -135,9 +130,7 @@ router.post("/check-in", verifyToken, async (req, res) => {
 router.get("/check-in", verifyToken, async (req, res) => {
     CheckIn.find({ userId: req.query.userId }, async (error, data) => {
         await data.forEach(x => {
-            console.log(new Date(x.endDate) < new Date(), (x.price))
             new Date(x.endDate) < new Date() && x.status == "check-in" ? x.fine = (x.price + 50) : x = x;
-            console.log(x);
         })
         res.status(200).send(data);
     })
@@ -179,62 +172,14 @@ router.post("/reserve-book", verifyToken, async (req, res) => {
     })
 })
 router.get("/reserve-book", verifyToken, async (req, res) => {
-    ReserveBook.find({ userId: req.query.userId }, async (error, data) => {
+    const item = req.query.userId;
+    let name = {};
+    item?.length == 0 ? name = name : name = { userId: req.query.userId };
+    console.log(name,item)
+    ReserveBook.find(name, async (error, data) => {
         res.status(200).send(data);
     })
 
 })
-// router.post("/create-teams", verifyToken, async (req, res) => {
-//     let data = { userId: req.userId, teams: req.body };
-//     let team = new Teams(data);
-//     team.save((error, data) => {
-//         res.status(200).send(data);
-//     })
-// })
-// router.post("/add-player", verifyToken, async (req, res) => {
-//     let obj = [{
-//         batsman1: req.body.batsman1,
-//         batsman2: req.body.batsman2,
-//         bowler: req.body.bowler
-//     }];
-//      Teams.updateOne({ _id: req.body._id }, { $set: { player_record: obj } }, async (err, data) => {
-//         data ? res.status(200).send(data) : res.status(400).send("Nothing Found");
-//     })
-//     // console.log(req.body._id, "data");
-//     await getPlayerRecords(req);
-// })
-// function getPlayerRecords(req){
-//     Teams.find({ _id: req.body._id }, async (error, data) => {    
-//         console.log(data, "data");
-//         let over = await new Overs({ userId: data[0].userId, teamId: data[0]._id, overs: [] });
-//         await over.save(async (error, overdata) => {
-//             await console.log(overdata, "overData")
-//         })
-//     })
-// }
-// router.get("/records/:id", verifyToken, (req, res) => {
-//     Teams.find({ _id: req.params.id }, (error, data) => {
-//         res.status(200).send(data);
-//     })
-// })
-// router.post("/overs-record", verifyToken, (req, res) => {
-//     let item = {
-//         bowler: req.body.bowler,
-//         batsman: req.body.batsman,
-//         ball_count: req.body.ball_count,
-//         runs: req.body.runs,
-//         extraRuns: req.body.extraRuns
-//     };
-//     Overs.updateOne({ teamId: req.body.teamId }, { $push: { 'overs': item } }, (err, result) => {
-//         res.status(200).send(result);
-//     })
-// })
-// router.get("/ball-records/:id", verifyToken, (req, res) => {
-//     console.log(req.params.id);
-//     Overs.find({ teamId: req.params.id }, async (error, data) => {
-//         let dataItem = await data[0].overs ?? null;
-//         console.log(dataItem)
-//         res.status(200).send(data);
-//     })
-// })
+
 module.exports = router;
