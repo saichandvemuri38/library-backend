@@ -158,7 +158,8 @@ router.post("/pay-fine", verifyToken, async (req, res) => {
     })
 })
 router.post("/check-out", verifyToken, async (req, res) => {
-    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-out", libraryname: req.body.libraryname } }, async (error, data1) => {
+    let date = new Date();
+    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-out", libraryname: req.body.libraryname,endDate:date } }, async (error, data1) => {
         let book = new Books(req.body);
         book.save((error, data) => {
             res.status(200).send({ data, data1 });
@@ -179,7 +180,15 @@ router.get("/reserve-book", verifyToken, async (req, res) => {
     ReserveBook.find(name, async (error, data) => {
         res.status(200).send(data);
     })
-
 })
+router.delete('/delete-reserve-book',verifyToken, async (req, res) => {
+    ReserveBook.deleteMany({ _id: req.query.id }, async (error, deletedata) => {
+        let book = new Books(req.body);
+        book.save((error, data) => {
+            res.status(200).send({data,deletedata});
+        })
+    }) 
+
+});
 
 module.exports = router;

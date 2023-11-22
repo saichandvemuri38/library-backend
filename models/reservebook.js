@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 
 const reserveList = new Schema({
    name:String,
-   image:String,
-   desctiption:String,
+   description:String,
    author:String,
    publisher:String,
    department:String,

@@ -6,7 +6,7 @@ const checkInList = new Schema({
    bookId:String,
    name:String,
    image:String,
-   desctiption:String,
+   description:String,
    author:String,
    publisher:String,
    department:String,
