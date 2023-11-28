@@ -87,9 +87,39 @@ router.post('/login', (req, res) => {
         }
     })
 })
+router.post('/forgot-password', (req, res) => {
+    let userData = req.body
+    if(userData.password == ''){
+        User.findOne({
+            email: userData.email
+        }, (error, user) => {
+            if (error) {
+                console.log(error)
+            } else {
+                if (!user) {
+                    res.status(401).send('Invalid email User doesnot exist')
+                }
+                else{
+                    res.send("true");
+                }
+            }
+        });
+    }
+    else{
+        User.updateMany({ email: userData.email }, { $set: { password:userData.password } }, async (error, data) => {
+            res.status(200).send({data,changed:true});
+        })
+    }
+ 
+})
 router.post("/add-library", verifyToken, async (req, res) => {
     let library = new Addlibrary(req.body);
     library.save((error, data) => {
+        res.status(200).send(data);
+    })
+})
+router.get('/user-records',verifyToken,(req,res)=>{
+    User.findById({_id:req.query.id}, (error, data) => {
         res.status(200).send(data);
     })
 })
@@ -159,7 +189,7 @@ router.post("/pay-fine", verifyToken, async (req, res) => {
 })
 router.post("/check-out", verifyToken, async (req, res) => {
     let date = new Date();
-    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-out", libraryname: req.body.libraryname,endDate:date } }, async (error, data1) => {
+    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-out", libraryname: req.body.libraryname, endDate: date } }, async (error, data1) => {
         let book = new Books(req.body);
         book.save((error, data) => {
             res.status(200).send({ data, data1 });
@@ -176,19 +206,20 @@ router.get("/reserve-book", verifyToken, async (req, res) => {
     const item = req.query.userId;
     let name = {};
     item?.length == 0 ? name = name : name = { userId: req.query.userId };
-    console.log(name,item)
+    console.log(name, item)
     ReserveBook.find(name, async (error, data) => {
         res.status(200).send(data);
     })
 })
-router.delete('/delete-reserve-book',verifyToken, async (req, res) => {
+router.delete('/delete-reserve-book', verifyToken, async (req, res) => {
     ReserveBook.deleteMany({ _id: req.query.id }, async (error, deletedata) => {
         let book = new Books(req.body);
         book.save((error, data) => {
-            res.status(200).send({data,deletedata});
+            res.status(200).send({ data, deletedata });
         })
-    }) 
+    })
 
 });
+
 
 module.exports = router;
