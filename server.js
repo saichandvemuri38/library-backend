@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(bodyParser.json({limit: '50mb'}));
-
+app.options('*', cors());
 // route.use('/route',route)
 app.use('/api',api)
 app.use(cors());
