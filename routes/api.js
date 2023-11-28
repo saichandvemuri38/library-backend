@@ -119,7 +119,7 @@ router.post("/add-library", verifyToken, async (req, res) => {
     })
 })
 router.get('/user-records',verifyToken,(req,res)=>{
-    User.findById({_id:req.query.id}, (error, data) => {
+    User.findById(req.query.id, (error, data) => {
         res.status(200).send(data);
     })
 })
