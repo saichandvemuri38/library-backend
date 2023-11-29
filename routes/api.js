@@ -37,7 +37,6 @@ function verifyToken(req, res, next) {
 router.get('/', (req, res) => {
     res.send('from route api');
 })
-
 router.post('/register', (req, res) => {
     let userData = req.body
     let user = new User(userData);
@@ -142,7 +141,6 @@ router.get('/book-list', verifyToken, async (req, res) => {
         res.status(200).send(data);
     })
 })
-
 router.post("/check-in", verifyToken, async (req, res) => {
     let checkIn = new CheckIn(req.body);
 
@@ -156,7 +154,6 @@ router.post("/check-in", verifyToken, async (req, res) => {
     })
 
 })
-
 router.get("/check-in", verifyToken, async (req, res) => {
     CheckIn.find({ userId: req.query.userId }, async (error, data) => {
         await data.forEach(x => {
@@ -165,13 +162,11 @@ router.get("/check-in", verifyToken, async (req, res) => {
         res.status(200).send(data);
     })
 })
-
 router.post("/renewal-book", verifyToken, async (req, res) => {
     CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-in", startDate: req.body.startDate, endDate: req.body.endDate } }, async (error, data) => {
         res.status(200).send(data);
     })
 })
-
 router.post("/pay-fine", verifyToken, async (req, res) => {
     CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "paid" } }, async (error, data) => {
         let obj = {
@@ -220,6 +215,5 @@ router.delete('/delete-reserve-book', verifyToken, async (req, res) => {
     })
 
 });
-
 
 module.exports = router;
