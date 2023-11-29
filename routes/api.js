@@ -215,5 +215,10 @@ router.delete('/delete-reserve-book', verifyToken, async (req, res) => {
     })
 
 });
+router.get('/fine-list',verifyToken,(req,res)=>{
+    fineList.find({libraryname: req.query.libraryname} , (error, data) => {
+        data.status(200).send(data);
+    })
+})
 
 module.exports = router;
