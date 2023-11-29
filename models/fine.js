@@ -8,7 +8,8 @@ const fineList = new Schema({
    amount:Number,
    status:String,
    bookId:String,
-   bookname:String
+   bookname:String,
+   userName:String
 })
 
 module.exports = mongoose.model('fine',fineList,'fines')

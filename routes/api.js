@@ -141,6 +141,11 @@ router.get('/book-list', verifyToken, async (req, res) => {
         res.status(200).send(data);
     })
 })
+router.get('/book', verifyToken, async (req, res) => {
+    Books.find({libraryname:req.query.libraryname}, (error, data) => {
+        res.status(200).send(data);
+    })
+})
 router.post("/check-in", verifyToken, async (req, res) => {
     let checkIn = new CheckIn(req.body);
 
@@ -175,7 +180,8 @@ router.post("/pay-fine", verifyToken, async (req, res) => {
             amount: req.body.fine,
             status: "Paid",
             bookId: req.body.bookId,
-            bookname: req.body.bookname,
+            bookname: req.body.name,
+            userName:req.body.userName
         }
         let fine = new fineList(obj);
         fine.save()
@@ -217,7 +223,7 @@ router.delete('/delete-reserve-book', verifyToken, async (req, res) => {
 });
 router.get('/fine-list',verifyToken,(req,res)=>{
     fineList.find({libraryname: req.query.libraryname} , (error, data) => {
-        data.status(200).send(data);
+        res.status(200).send(data);
     })
 })
 
