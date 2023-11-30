@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 const fineList = require('../models/fine');
 const jwt = require('jsonwebtoken');
 
+// const db = 'mongodb+srv://root:root@cluster0.gcrit.mongodb.net/library_management_system';
 const db = 'mongodb+srv://root:root@cluster0.gcrit.mongodb.net/library_management_system';
-
 router.use(express.json());
 mongoose.connect(db, err => {
     if (err) {
