@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const checkInList = new Schema({
+const transactions = new Schema({
    bookId:String,
    name:String,
    image:String,
@@ -23,4 +23,4 @@ const checkInList = new Schema({
    depositedIn:String
 })
 
-module.exports = mongoose.model('checkin',checkInList,'checkinitems')
+module.exports = mongoose.model('checkin',transactions,'transactions')
