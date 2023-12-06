@@ -20,7 +20,8 @@ const transactions = new Schema({
    startDate:String,
    endDate:String,
    fine:Number,
-   depositedIn:String
+   depositedIn:String,
+   shelve:String
 })
 
 module.exports = mongoose.model('checkin',transactions,'transactions')

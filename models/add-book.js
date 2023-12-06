@@ -14,7 +14,8 @@ const bookList = new Schema({
    availability:String,
    rent:Number,
    libraryname:String,
-   status:String
+   status:String,
+   shelve:String
 })
 
 module.exports = mongoose.model('book',bookList,'books')

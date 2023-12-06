@@ -12,7 +12,8 @@ const reserveList = new Schema({
    libraryname:String,
    userId:String,
    image:String,
-   bookId:String
+   bookId:String,
+   shelve:String
 })
 
 module.exports = mongoose.model('reserveitem',reserveList,'reserveBooks')
