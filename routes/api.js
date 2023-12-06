@@ -162,8 +162,10 @@ router.post("/check-in", verifyToken, async (req, res) => {
 router.get("/check-in", verifyToken, async (req, res) => {
     CheckIn.find({ userId: req.query.userId }, async (error, data) => {
         await data.forEach(x => {
+            console.log(new Date(x.endDate) < new Date() && x.status == "check-in")
             new Date(x.endDate) < new Date() && x.status == "check-in" ? x.fine = (x.price + 50) : x = x;
         })
+        console.log(data);
         res.status(200).send(data);
     })
 })
@@ -204,11 +206,8 @@ router.post("/reserve-book", verifyToken, async (req, res) => {
     })
 })
 router.get("/reserve-book", verifyToken, async (req, res) => {
-    const item = req.query.userId;
-    let name = {};
-    item?.length == 0 ? name = name : name = { userId: req.query.userId };
-    console.log(name, item)
-    ReserveBook.find(name, async (error, data) => {
+ 
+    ReserveBook.find({ userId: req.query.userId }, async (error, data) => {
         res.status(200).send(data);
     })
 })
