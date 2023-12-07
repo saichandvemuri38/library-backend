@@ -47,8 +47,24 @@ router.post('/register', (req, res) => {
             let payload = {
                 subject: registeredUser._id,
                 role: user.usertype,
-                name: user.name,
-                libraryname: user.library_name
+                fname: user.fname ,
+                lname:user.lname,
+                libraryname: user.library_name,
+
+                // confirmPassword:user.confirmPassword,
+                
+                // dob:user.dob,
+                
+                // email:user.email,
+               
+                // fname:user.fname,
+                
+                // lname:user.lname,
+              
+                // password:user.password,
+             
+                // phoneNumber:user.phoneNumber,
+
             }
             let token = jwt.sign(payload, 'secretKey')
             res.status(200).send({
@@ -74,7 +90,8 @@ router.post('/login', (req, res) => {
                     let payload = {
                         subject: user._id,
                         role: user.usertype,
-                        name: user.name,
+                        fname: user.fname ,
+                        lname:user.lname,
                         libraryname: user.library_name
                     }
                     let token = jwt.sign(payload, 'secretKey')
@@ -162,15 +179,15 @@ router.post("/check-in", verifyToken, async (req, res) => {
 router.get("/check-in", verifyToken, async (req, res) => {
     CheckIn.find({ userId: req.query.userId }, async (error, data) => {
         await data.forEach(x => {
-            console.log(new Date(x.endDate) < new Date() && x.status == "check-in")
-            new Date(x.endDate) < new Date() && x.status == "check-in" ? x.fine = (x.price + 50) : x = x;
+            console.log(new Date(x.endDate) < new Date() && x.status == "on-hand")
+            new Date(x.endDate) < new Date() && x.status == "on-hand" ? x.fine = (x.price + 50) : x = x;
         })
         console.log(data);
         res.status(200).send(data);
     })
 })
 router.post("/renewal-book", verifyToken, async (req, res) => {
-    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "check-in", startDate: req.body.startDate, endDate: req.body.endDate } }, async (error, data) => {
+    CheckIn.updateMany({ bookId: req.body.bookId }, { $set: { status: "on-hand", startDate: req.body.startDate, endDate: req.body.endDate } }, async (error, data) => {
         res.status(200).send(data);
     })
 })
